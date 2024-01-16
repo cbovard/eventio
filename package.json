@@ -6,11 +6,7 @@
     "dev": "blitz dev",
     "build": "blitz build",
     "start": "blitz start",
-    "studio": "blitz prisma studio",
-    "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
-    "test": "vitest run --passWithNoTests",
-    "test:watch": "vitest",
-    "prepare": "husky install"
+    "studio": "blitz prisma studio"
   },
   "prisma": {
     "schema": "db/schema.prisma"
@@ -46,9 +42,6 @@
     "@types/preview-email": "3.0.4",
     "@types/react": "18.0.23",
     "@types/react-dom": "18.0.7",
-    "eslint": "8.26.0",
-    "eslint-config-next": "13.0.0",
-    "husky": "8.0.2",
     "preview-email": "3.0.7",
     "typescript": "4.8.4"
   }
