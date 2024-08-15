@@ -1,15 +1,12 @@
-import React from "react";
-import { BlitzPage } from "@blitzjs/next";
+import React from 'react';
 
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "baaa",
-  description: "boo",
-};
-
-const AboutPage: BlitzPage = () => {
-  return <div>This is the about page.</div>;
+const AboutPage: React.FC = () => {
+  return (
+    <div>
+      <h1>About Page</h1>
+      <p>Welcome to the About page!</p>
+    </div>
+  );
 };
 
 export default AboutPage;
