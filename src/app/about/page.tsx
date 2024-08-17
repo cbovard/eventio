@@ -1,6 +1,7 @@
-import React from 'react';
+import React from "react";
+import { BlitzPage } from "@blitzjs/next";
 
-const AboutPage: React.FC = () => {
+const AboutPage: BlitzPage = () => {
   return (
     <div>
       <h1>About Page</h1>
