@@ -3,6 +3,9 @@ import { Inter } from "next/font/google";
 import { Metadata } from "next";
 import "./styles/globals.css";
 
+import "@mantine/core/styles.css";
+import { ColorSchemeScript, MantineProvider } from "@mantine/core";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -10,16 +13,21 @@ export const metadata: Metadata = {
     template: "%s | Eventio",
     default: "Eventio",
   },
-  description: "Evention is a platform for managing events and attendees.",
+  description: "Eventio is a platform for managing events and attendees.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} dark`}>
-        <BlitzProvider>
-          <>{children}</>
-        </BlitzProvider>
+      <head>
+        <ColorSchemeScript />
+      </head>
+      <body className={`${inter.className}`}>
+        <MantineProvider defaultColorScheme="dark">
+          <BlitzProvider>
+            <>{children}</>
+          </BlitzProvider>
+        </MantineProvider>
       </body>
     </html>
   );
