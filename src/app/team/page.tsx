@@ -1,5 +1,10 @@
 import React from "react";
 import { BlitzPage } from "@blitzjs/next";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Team",
+};
 
 const TeamPage: BlitzPage = () => {
   return (
