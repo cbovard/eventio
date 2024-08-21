@@ -1,5 +1,6 @@
 import { LogoutButton } from "../(auth)/components/LogoutButton";
 import Link from "next/link";
+import { Button } from "@mantine/core";
 
 export const UserInfo = ({ currentUser }: { currentUser: any }) => {
   if (currentUser) {
@@ -16,12 +17,12 @@ export const UserInfo = ({ currentUser }: { currentUser: any }) => {
   } else {
     return (
       <>
-        <Link href="/signup">
-          <strong>Sign Up</strong>
-        </Link>
-        <Link href="/login">
-          <strong>Login</strong>
-        </Link>
+        <Button w="200" radius="md" component={Link} href="/signup">
+          Sign Up
+        </Button>
+        <Button w="200" radius="md" component={Link} href="/login">
+          Login
+        </Button>
       </>
     );
   }
