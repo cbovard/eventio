@@ -1,45 +1,83 @@
-"use client"
-import { LabeledTextField } from "src/app/components/LabeledTextField"
-import { Form, FORM_ERROR } from "src/app/components/Form"
-import signup from "../mutations/signup"
-import { Signup } from "../validations"
-import { useMutation } from "@blitzjs/rpc"
-import { useRouter } from "next/navigation"
+"use client";
+import { FORM_ERROR } from "src/app/components/Form";
+import signup from "../mutations/signup";
+import { Signup } from "../validations";
+import { useMutation } from "@blitzjs/rpc";
+import { useRouter } from "next/navigation";
+
+import { useForm } from "@mantine/form";
+import { Button, Group, PasswordInput, TextInput, Title } from "@mantine/core";
 
 type SignupFormProps = {
-  onSuccess?: () => void
-}
+  onSuccess?: () => void;
+};
 
 export const SignupForm = (props: SignupFormProps) => {
-  const [signupMutation] = useMutation(signup)
-  const router = useRouter()
+  const [signupMutation] = useMutation(signup);
+  const router = useRouter();
+
+  const form = useForm({
+    mode: "uncontrolled",
+    initialValues: {
+      email: "",
+      name: "",
+      password: "",
+    },
+
+    validate: {
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+    },
+  });
+
+  let onSubmit = async (values) => {
+    console.log(values);
+    try {
+      await signupMutation(values);
+      router.refresh();
+      router.push("/");
+    } catch (error: any) {
+      if (error.code === "P2002" && error.meta?.target?.includes("email")) {
+        // This error comes from Prisma
+        return { email: "This email is already being used" };
+      } else {
+        return { [FORM_ERROR]: error.toString() };
+      }
+    }
+  };
 
   return (
     <div>
-      <h1>Create an Account</h1>
+      <Title>Create an Account</Title>
 
-      <Form
-        submitText="Create Account"
-        schema={Signup}
-        initialValues={{ email: "", password: "" }}
-        onSubmit={async (values) => {
-          try {
-            await signupMutation(values)
-            router.refresh()
-            router.push("/")
-          } catch (error: any) {
-            if (error.code === "P2002" && error.meta?.target?.includes("email")) {
-              // This error comes from Prisma
-              return { email: "This email is already being used" }
-            } else {
-              return { [FORM_ERROR]: error.toString() }
-            }
-          }
-        }}
-      >
-        <LabeledTextField name="email" label="Email" placeholder="Email" />
-        <LabeledTextField name="password" label="Password" placeholder="Password" type="password" />
-      </Form>
+      <form onSubmit={form.onSubmit(onSubmit)}>
+        <TextInput
+          withAsterisk
+          label="Email"
+          placeholder="your@email.com"
+          key={form.key("email")}
+          {...form.getInputProps("email")}
+        />
+
+        <TextInput
+          withAsterisk
+          label="Name"
+          placeholder="Your name here..."
+          key={form.key("name")}
+          {...form.getInputProps("name")}
+        />
+
+        <PasswordInput
+          withAsterisk
+          label="Password"
+          placeholder=""
+          key={form.key("password")}
+          {...form.getInputProps("password")}
+        />
+
+        <Group justify="flex-end" mt="md">
+          <Button type="submit">Submit</Button>
+        </Group>
+      </form>
     </div>
-  )
-}
+  );
+};

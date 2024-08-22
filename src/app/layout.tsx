@@ -37,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <AppShellMain>{children}</AppShellMain>
               <AppShellFooter>
                 <Horizontal centerH fullH fullW p="xs">
-                  <Text fs="xs" c="dimmed">
+                  <Text fz="xs" c="dimmed">
                     © copyright {thisYear} Eventio
                   </Text>
                 </Horizontal>

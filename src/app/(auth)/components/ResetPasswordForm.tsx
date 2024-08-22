@@ -1,20 +1,47 @@
-"use client"
-import { LabeledTextField } from "src/app/components/LabeledTextField"
-import { Form, FORM_ERROR } from "src/app/components/Form"
-import { ResetPassword } from "../validations"
-import resetPassword from "../mutations/resetPassword"
-import { useMutation } from "@blitzjs/rpc"
-import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+"use client";
+import { FORM_ERROR } from "src/app/components/Form";
+import { ResetPassword } from "../validations";
+import resetPassword from "../mutations/resetPassword";
+import { useMutation } from "@blitzjs/rpc";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+
+import { Button, Group, PasswordInput, TextInput, Title } from "@mantine/core";
+import { useForm } from "@mantine/form";
 
 export function ResetPasswordForm() {
-  const searchParams = useSearchParams()
-  const token = searchParams?.get("token")?.toString()
-  const [resetPasswordMutation, { isSuccess }] = useMutation(resetPassword)
+  const searchParams = useSearchParams();
+  const token = searchParams?.get("token")?.toString();
+  const [resetPasswordMutation, { isSuccess }] = useMutation(resetPassword);
+
+  const form = useForm({
+    mode: "uncontrolled",
+    initialValues: {
+      password: "",
+      passwordConfirmation: "",
+    },
+  });
+
+  const onSubmit = async (values) => {
+    console.log;
+    try {
+      await resetPasswordMutation({ ...values, token });
+    } catch (error: any) {
+      if (error.name === "ResetPasswordError") {
+        return {
+          [FORM_ERROR]: error.message,
+        };
+      } else {
+        return {
+          [FORM_ERROR]: "Sorry, we had an unexpected error. Please try again.",
+        };
+      }
+    }
+  };
 
   return (
     <div>
-      <h1>Set a New Password</h1>
+      <Title>Set a New Password</Title>
 
       {isSuccess ? (
         <div>
@@ -24,38 +51,28 @@ export function ResetPasswordForm() {
           </p>
         </div>
       ) : (
-        <Form
-          submitText="Reset Password"
-          schema={ResetPassword}
-          initialValues={{
-            password: "",
-            passwordConfirmation: "",
-            token,
-          }}
-          onSubmit={async (values) => {
-            try {
-              await resetPasswordMutation({ ...values, token })
-            } catch (error: any) {
-              if (error.name === "ResetPasswordError") {
-                return {
-                  [FORM_ERROR]: error.message,
-                }
-              } else {
-                return {
-                  [FORM_ERROR]: "Sorry, we had an unexpected error. Please try again.",
-                }
-              }
-            }
-          }}
-        >
-          <LabeledTextField name="password" label="New Password" type="password" />
-          <LabeledTextField
-            name="passwordConfirmation"
-            label="Confirm New Password"
-            type="password"
+        <form onSubmit={form.onSubmit(onSubmit)}>
+          <PasswordInput
+            withAsterisk
+            label="New Password"
+            placeholder=""
+            key={form.key("password")}
+            {...form.getInputProps("password")}
           />
-        </Form>
+
+          <PasswordInput
+            withAsterisk
+            label="Password Confirmation"
+            placeholder=""
+            key={form.key("password")}
+            {...form.getInputProps("passwordConfirmation")}
+          />
+
+          <Group justify="flex-end" mt="md">
+            <Button type="submit">Reset Password</Button>
+          </Group>
+        </form>
       )}
     </div>
-  )
+  );
 }

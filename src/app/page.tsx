@@ -6,6 +6,8 @@ import { Vertical } from "mantine-layout-components";
 export default async function Home() {
   const currentUser = await invoke(getCurrentUser, null);
 
+  console.log("home", currentUser);
+
   return (
     <>
       <Vertical spacing="md">

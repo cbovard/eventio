@@ -1,16 +1,40 @@
-"use client"
-import { LabeledTextField } from "src/app/components/LabeledTextField"
-import { Form, FORM_ERROR } from "src/app/components/Form"
-import { ForgotPassword } from "../validations"
-import forgotPassword from "../mutations/forgotPassword"
-import { useMutation } from "@blitzjs/rpc"
+"use client";
+import { FORM_ERROR } from "src/app/components/Form";
+import { ForgotPassword } from "../validations";
+import forgotPassword from "../mutations/forgotPassword";
+import { useMutation } from "@blitzjs/rpc";
+
+import { Button, Group, TextInput, Title } from "@mantine/core";
+import { useForm } from "@mantine/form";
 
 export function ForgotPasswordForm() {
-  const [forgotPasswordMutation, { isSuccess }] = useMutation(forgotPassword)
+  const [forgotPasswordMutation, { isSuccess }] = useMutation(forgotPassword);
+
+  const form = useForm({
+    mode: "uncontrolled",
+    initialValues: {
+      email: "",
+    },
+
+    validate: {
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+    },
+  });
+
+  let onSubmit = async (values) => {
+    console.log(values);
+    try {
+      await forgotPasswordMutation(values);
+    } catch (error: any) {
+      return {
+        [FORM_ERROR]: "Sorry, we had an unexpected error. Please try again.",
+      };
+    }
+  };
 
   return (
     <>
-      <h1>Forgot your password?</h1>
+      <Title>Forgot your password?</Title>
       <>
         {isSuccess ? (
           <div>
@@ -21,24 +45,21 @@ export function ForgotPasswordForm() {
             </p>
           </div>
         ) : (
-          <Form
-            submitText="Send Reset Password Instructions"
-            schema={ForgotPassword}
-            initialValues={{ email: "" }}
-            onSubmit={async (values) => {
-              try {
-                await forgotPasswordMutation(values)
-              } catch (error: any) {
-                return {
-                  [FORM_ERROR]: "Sorry, we had an unexpected error. Please try again.",
-                }
-              }
-            }}
-          >
-            <LabeledTextField name="email" label="Email" placeholder="Email" />
-          </Form>
+          <form onSubmit={form.onSubmit(onSubmit)}>
+            <TextInput
+              withAsterisk
+              label="Email"
+              placeholder="your@email.com"
+              key={form.key("email")}
+              {...form.getInputProps("email")}
+            />
+
+            <Group justify="flex-end" mt="md">
+              <Button type="submit">Send Reset Password Instructions</Button>
+            </Group>
+          </form>
         )}
       </>
     </>
-  )
+  );
 }

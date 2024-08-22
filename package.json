@@ -33,6 +33,7 @@
     "@hookform/error-message": "2.0.1",
     "@hookform/resolvers": "2.9.11",
     "@mantine/core": "7.12.1",
+    "@mantine/form": "7.12.1",
     "@mantine/hooks": "7.12.1",
     "@mantine/next": "6.0.22",
     "@prisma/client": "5.4.2",
