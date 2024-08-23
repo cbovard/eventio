@@ -1,7 +1,7 @@
 "use client";
-import logout from "../mutations/logout";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@blitzjs/rpc";
+import logout from "../mutations/logout";
 import { Button } from "@mantine/core";
 
 export function LogoutButton() {
@@ -10,6 +10,8 @@ export function LogoutButton() {
   return (
     <>
       <Button
+        style={{ width: "120px" }}
+        mr="xs"
         onClick={async () => {
           await logoutMutation();
           router.refresh();

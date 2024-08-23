@@ -1,17 +1,17 @@
-import { LogoutButton } from "../(auth)/components/LogoutButton";
-import Link from "next/link";
-import { Button } from "@mantine/core";
+import { Stack, Text } from "@mantine/core";
 
 export const UserInfo = ({ currentUser }: { currentUser: any }) => {
   if (!currentUser) return null;
   return (
     <>
-      <LogoutButton />
-      <div>
-        User id: <code>{currentUser.id}</code>
-        <br />
-        User role: <code>{currentUser.role}</code>
-      </div>
+      <Stack align="stretch" justify="flex-start" gap="lg">
+        <Text>
+          User id: <code>{currentUser.id}</code>
+        </Text>
+        <Text>
+          User role: <code>{currentUser.role}</code>
+        </Text>
+      </Stack>
     </>
   );
 };
