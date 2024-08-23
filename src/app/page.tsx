@@ -1,19 +1,24 @@
 import { invoke } from "@/blitz-server";
 import getCurrentUser from "@/users/queries/getCurrentUser";
-import { UserInfo } from "@/components/UserInfo";
 import { Vertical } from "mantine-layout-components";
+import { Title } from "@mantine/core";
+import { UserInfo } from "@/components/UserInfo";
+// TODO - clean this up below.
+import { AuthenticationForm } from "@/components/MainAuthenticationForm/index";
 
 export default async function Home() {
   const currentUser = await invoke(getCurrentUser, null);
 
-  console.log("home", currentUser);
-
   return (
     <>
       <Vertical spacing="md">
-        <h1>Home</h1>
-        <p>Welcome to the Eventio platform.</p>
-        <UserInfo currentUser={currentUser} />
+        <Title>Home</Title>
+        {currentUser && <UserInfo currentUser={currentUser} />}
+        {!currentUser && (
+          <Vertical center>
+            <AuthenticationForm />
+          </Vertical>
+        )}
       </Vertical>
     </>
   );

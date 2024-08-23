@@ -1,11 +1,22 @@
 import { BlitzProvider } from "./blitz-client";
 import { Inter } from "next/font/google";
 import { Metadata } from "next";
+import Link from "next/link";
 import "./styles/globals.css";
 import "@mantine/core/styles.css";
 import { ColorSchemeScript, MantineProvider } from "@mantine/core";
-import { AppShell, AppShellHeader, AppShellMain, Text, AppShellFooter } from "@mantine/core";
-import { Horizontal } from "mantine-layout-components";
+import {
+  AppShell,
+  AppShellHeader,
+  AppShellMain,
+  Text,
+  AppShellFooter,
+  Anchor,
+  Stack,
+  Flex,
+  Box,
+} from "@mantine/core";
+// /import { Horizontal } from "mantine-layout-components";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,17 +41,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <BlitzProvider>
             <AppShell header={{ height: 45 }} footer={{ height: 60 }} padding="md">
               <AppShellHeader>
-                <Horizontal fullH p="xs">
-                  <Text fw="bold">Eventio</Text>
-                </Horizontal>
+                <Stack align="left" justify="center" style={{ height: "100%" }}>
+                  <Anchor component={Link} href="/" underline="never" c="gray.3" fw="bold" p="xs">
+                    Eventio
+                  </Anchor>
+                </Stack>
               </AppShellHeader>
               <AppShellMain>{children}</AppShellMain>
               <AppShellFooter>
-                <Horizontal centerH fullH fullW p="xs">
+                <Stack align="center" justify="center" style={{ height: "100%" }}>
                   <Text fz="xs" c="dimmed">
                     © copyright {thisYear} Eventio
                   </Text>
-                </Horizontal>
+                </Stack>
               </AppShellFooter>
             </AppShell>
           </BlitzProvider>
