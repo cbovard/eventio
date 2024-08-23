@@ -1,6 +1,17 @@
 "use client";
+import { AuthenticationError, PromiseReturnType } from "blitz";
+import Link from "next/link";
+import { FORM_ERROR } from "src/app/components/Form";
+import login from "../../mutations/login";
+import signup from "../../mutations/signup";
+import { Login } from "../../validations";
+import { useMutation } from "@blitzjs/rpc";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import type { Route } from "next";
 import { useToggle, upperFirst } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
+
 import {
   Container,
   TextInput,
@@ -20,7 +31,14 @@ import { FacebookButton } from "./FacebookButton";
 // import { TwitterButton } from "./TwitterButton";
 
 export function AuthenticationForm(props: PaperProps) {
+  const [loginMutation] = useMutation(login);
+  const [signupMutation] = useMutation(signup);
+
+  const router = useRouter();
+  const next = useSearchParams()?.get("next");
+
   const [type, toggle] = useToggle(["login", "register"]);
+
   const form = useForm({
     initialValues: {
       email: "",
@@ -34,6 +52,54 @@ export function AuthenticationForm(props: PaperProps) {
       password: (val) => (val.length <= 6 ? "Password should include at least 6 characters" : null),
     },
   });
+
+  const onLogin = async (values: typeof form.values) => {
+    console.log(values);
+    try {
+      await loginMutation(values);
+      router.refresh();
+      if (next) {
+        router.push(next as Route);
+      } else {
+        router.push("/");
+      }
+    } catch (error: any) {
+      if (error instanceof AuthenticationError) {
+        return { [FORM_ERROR]: "Sorry, those credentials are invalid" };
+      } else {
+        return {
+          [FORM_ERROR]:
+            "Sorry, we had an unexpected error. Please try again. - " + error.toString(),
+        };
+      }
+    }
+  };
+
+  const onSignup = async (values: typeof form.values) => {
+    console.log(values);
+    try {
+      await signupMutation(values);
+      router.refresh();
+      router.push("/");
+    } catch (error: any) {
+      if (error.code === "P2002" && error.meta?.target?.includes("email")) {
+        // This error comes from Prisma
+        return { email: "This email is already being used" };
+      } else {
+        return { [FORM_ERROR]: error.toString() };
+      }
+    }
+  };
+
+  const onSubmit = (values: typeof form.values) => {
+    if (type === "login") {
+      onLogin(values);
+    } else {
+      onSignup(values);
+    }
+
+    console.log("values 2", values);
+  };
 
   return (
     <Container size="lg">
@@ -49,14 +115,13 @@ export function AuthenticationForm(props: PaperProps) {
 
         <Divider label="Or continue with email" labelPosition="center" my="lg" />
 
-        <form onSubmit={form.onSubmit(() => {})}>
+        <form onSubmit={form.onSubmit(onSubmit)}>
           <Stack>
             {type === "register" && (
               <TextInput
                 label="Name"
                 placeholder="Your name"
-                value={form.values.name}
-                onChange={(event) => form.setFieldValue("name", event.currentTarget.value)}
+                {...form.getInputProps("name")}
                 radius="md"
               />
             )}
@@ -65,9 +130,7 @@ export function AuthenticationForm(props: PaperProps) {
               required
               label="Email"
               placeholder="hello@mantine.dev"
-              value={form.values.email}
-              onChange={(event) => form.setFieldValue("email", event.currentTarget.value)}
-              error={form.errors.email && "Invalid email"}
+              {...form.getInputProps("email")}
               radius="md"
             />
 
@@ -75,9 +138,7 @@ export function AuthenticationForm(props: PaperProps) {
               required
               label="Password"
               placeholder="Your password"
-              value={form.values.password}
-              onChange={(event) => form.setFieldValue("password", event.currentTarget.value)}
-              error={form.errors.password && "Password should include at least 6 characters"}
+              {...form.getInputProps("password")}
               radius="md"
             />
 
