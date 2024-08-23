@@ -1,7 +1,6 @@
 import { invoke } from "@/blitz-server";
 import getCurrentUser from "@/users/queries/getCurrentUser";
-import { Vertical } from "mantine-layout-components";
-import { Title } from "@mantine/core";
+import { Title, Stack } from "@mantine/core";
 import { UserInfo } from "@/components/UserInfo";
 // TODO - clean this up below.
 import { AuthenticationForm } from "./(auth)/components/MainAuthenticationForm/index";
@@ -11,15 +10,15 @@ export default async function Home() {
 
   return (
     <>
-      <Vertical spacing="md">
+      <Stack align="stretch" justify="flex-start" gap="md">
         <Title>Home</Title>
         {currentUser && <UserInfo currentUser={currentUser} />}
         {!currentUser && (
-          <Vertical center>
+          <Stack align="center" justify="center" style={{ height: "100%" }}>
             <AuthenticationForm />
-          </Vertical>
+          </Stack>
         )}
-      </Vertical>
+      </Stack>
     </>
   );
 }

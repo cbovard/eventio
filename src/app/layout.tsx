@@ -16,7 +16,6 @@ import {
   Flex,
   Box,
 } from "@mantine/core";
-// /import { Horizontal } from "mantine-layout-components";
 
 const inter = Inter({ subsets: ["latin"] });
 
