@@ -1,24 +1,58 @@
 import { invoke } from "@/blitz-server";
-import getCurrentUser from "@/users/queries/getCurrentUser";
-import { Title, Stack } from "@mantine/core";
+import {
+  AppShell,
+  AppShellHeader,
+  AppShellMain,
+  Text,
+  AppShellFooter,
+  Group,
+  Anchor,
+  Title,
+  Stack,
+} from "@mantine/core";
 import { UserInfo } from "@/components/UserInfo";
+import getCurrentUser from "@/users/queries/getCurrentUser";
+import Link from "next/link";
+import { LogoutButton } from "@/(auth)/components/LogoutButton";
 // TODO - clean this up below.
 import { AuthenticationForm } from "./(auth)/components/MainAuthenticationForm/index";
+// import { CustomBurger } from "@/components/CustomBurger";
 
 export default async function Home() {
   const currentUser = await invoke(getCurrentUser, null);
+  const thisYear = new Date().getFullYear();
 
   return (
     <>
-      <Stack align="stretch" justify="flex-start" gap="md">
-        <Title>Home</Title>
-        {currentUser && <UserInfo currentUser={currentUser} />}
-        {!currentUser && (
-          <Stack align="center" justify="center" style={{ height: "100%" }}>
-            <AuthenticationForm />
+      <AppShell header={{ height: 45 }} footer={{ height: 60 }} padding="md">
+        <AppShellHeader>
+          <Group justify="space-between" gap="sm">
+            <Anchor component={Link} href="/" underline="never" c="gray.3" fw="bold" p="xs">
+              Eventio
+            </Anchor>
+            {/* <CustomBurger /> */}
+            {currentUser && <LogoutButton />}
+          </Group>
+        </AppShellHeader>
+        <AppShellMain>
+          <Stack align="stretch" justify="flex-start" gap="md">
+            <Title>Home</Title>
+            {currentUser && <UserInfo currentUser={currentUser} />}
+            {!currentUser && (
+              <Stack align="center" justify="center" style={{ height: "100%" }}>
+                <AuthenticationForm />
+              </Stack>
+            )}
           </Stack>
-        )}
-      </Stack>
+        </AppShellMain>
+        <AppShellFooter>
+          <Stack align="center" justify="center" style={{ height: "100%" }}>
+            <Text fz="xs" c="dimmed">
+              © copyright {thisYear} Eventio
+            </Text>
+          </Stack>
+        </AppShellFooter>
+      </AppShell>
     </>
   );
 }
