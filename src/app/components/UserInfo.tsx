@@ -10,7 +10,7 @@ const Todos = () => {
 
   return (
     <List>
-      {todos.map((todo: { title: string; id: number }, index: number) => (
+      {todos.map((todo: { title: string; id: number }) => (
         <List.Item key={todo.id}>
           <Text>{todo.title}</Text>
         </List.Item>
@@ -19,7 +19,14 @@ const Todos = () => {
   );
 };
 
-export const UserInfo = ({ currentUser }: { currentUser: any }) => {
+interface User {
+  id: number;
+  name: string | null;
+  email: string;
+  role: string;
+}
+
+export const UserInfo = ({ currentUser }: { currentUser: User }) => {
   const [singleTodo] = useQuery(getTodo, {});
 
   //console.log("todos", todos);
