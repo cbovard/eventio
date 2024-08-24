@@ -24,7 +24,7 @@ export default async function Home() {
 
   return (
     <>
-      <AppShell header={{ height: 45 }} footer={{ height: 60 }} padding="md">
+      <AppShell header={{ height: 55 }} footer={{ height: 60 }} padding="md">
         <AppShellHeader>
           <Group justify="space-between" gap="sm">
             <Anchor component={Link} href="/" underline="never" c="gray.3" fw="bold" p="xs">

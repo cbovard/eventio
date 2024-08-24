@@ -10,7 +10,8 @@ export function LogoutButton() {
   return (
     <>
       <Button
-        style={{ width: "120px" }}
+        size="xs"
+        variant="light"
         mr="xs"
         onClick={async () => {
           await logoutMutation();
