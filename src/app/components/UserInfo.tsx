@@ -5,19 +5,19 @@ import getTodos from "@/todos/queries/getTodos";
 import getTodo from "@/todo/queries/getTodo";
 import { Suspense } from "react";
 
-const Todos = () => {
-  const [todos] = useQuery(getTodos, {});
+// const Todos = () => {
+//   const [todos] = useQuery(getTodos, {});
 
-  return (
-    <List>
-      {todos.map((todo: { title: string; id: number }) => (
-        <List.Item key={todo.id}>
-          <Text>{todo.title}</Text>
-        </List.Item>
-      ))}
-    </List>
-  );
-};
+//   return (
+//     <List>
+//       {todos.map((todo: { title: string; id: number }) => (
+//         <List.Item key={todo.id}>
+//           <Text>{todo.title}</Text>
+//         </List.Item>
+//       ))}
+//     </List>
+//   );
+// };
 
 interface User {
   id: number;
@@ -30,7 +30,7 @@ export const UserInfo = ({ currentUser }: { currentUser: User }) => {
   const [singleTodo] = useQuery(getTodo, {});
 
   //console.log("todos", todos);
-  console.log("single todo", singleTodo);
+  //console.log("single todo", singleTodo);
 
   // const fetchTodos = () =>
   //   fetch("/api/todos")
@@ -45,9 +45,9 @@ export const UserInfo = ({ currentUser }: { currentUser: User }) => {
         {/* <Button onClick={fetchTodos} size="md" style={{ width: "140px" }}>
           Fetch Todos
         </Button> */}
-        <Suspense fallback={<Loader />}>
+        {/* <Suspense fallback={<Loader />}>
           <Todos />
-        </Suspense>
+        </Suspense> */}
         <Text>
           User id: <code>{currentUser.id}</code>
         </Text>
