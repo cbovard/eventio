@@ -33,7 +33,7 @@ export const LoginForm = (props: LoginFormProps) => {
     },
   });
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values: typeof form.values) => {
     console.log(values);
     try {
       await loginMutation(values);

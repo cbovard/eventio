@@ -26,7 +26,7 @@ export default async function Home() {
     <>
       <AppShell header={{ height: 55 }} footer={{ height: 60 }} padding="md">
         <AppShellHeader>
-          <Group justify="space-between" gap="sm">
+          <Group justify="space-between" gap="sm" h="55">
             <Anchor component={Link} href="/" underline="never" c="gray.3" fw="bold" p="xs">
               Eventio
             </Anchor>
