@@ -8,7 +8,9 @@ import getTodo from "@/todo/queries/getTodo";
 import { Suspense } from "react";
 
 const Todos = () => {
-  const [todos] = useQuery(getTodos, {});
+  const [todos] = useQuery(getTodos, {
+    search: "blah",
+  });
 
   return (
     <List>
@@ -23,7 +25,7 @@ const Todos = () => {
 
 export const TodosPage: BlitzPage = () => {
   return (
-    <Stack h={300} bg="var(--mantine-color-body)" align="stretch" justify="center" gap="md">
+    <Stack h={300} align="stretch" justify="center" gap="md">
       <Suspense fallback={<Loader />}>
         <Todos />
       </Suspense>
