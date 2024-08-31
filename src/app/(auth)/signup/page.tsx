@@ -1,5 +1,17 @@
-import { SignupForm } from "../components/SignupForm"
+//import { SignupForm } from "../components/SignupForm"
+import { Title, Stack } from "@mantine/core";
+import { AuthenticationForm } from "../components/MainAuthenticationForm/index";
 
 export default function SignUpPage() {
-  return <SignupForm />
+  //return <SignupForm />
+  return (
+    <>
+      <Stack align="stretch" justify="flex-start" gap="md">
+        <Title>Sign Up</Title>
+        <Stack align="center" justify="center" style={{ height: "100%" }}>
+          <AuthenticationForm />
+        </Stack>
+      </Stack>
+    </>
+  );
 }

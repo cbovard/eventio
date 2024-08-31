@@ -1,10 +1,8 @@
 "use client";
 import { AuthenticationError, PromiseReturnType } from "blitz";
-import Link from "next/link";
-import { FORM_ERROR } from "src/app/components/Form";
-import login from "../../mutations/login";
-import signup from "../../mutations/signup";
-import { Login } from "../../validations";
+import { FORM_ERROR } from "@/components/Form";
+import login from "@/(auth)/mutations/login";
+import signup from "@/(auth)/mutations/signup";
 import { useMutation } from "@blitzjs/rpc";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -28,11 +26,10 @@ import {
 } from "@mantine/core";
 import { GoogleButton } from "./GoogleButton";
 import { FacebookButton } from "./FacebookButton";
-// import { TwitterButton } from "./TwitterButton";
 
 export function AuthenticationForm(props: PaperProps) {
-  const [loginMutation] = useMutation(login);
-  const [signupMutation] = useMutation(signup);
+  const [$login] = useMutation(login);
+  const [$signup] = useMutation(signup);
 
   const router = useRouter();
   const next = useSearchParams()?.get("next");
@@ -54,10 +51,11 @@ export function AuthenticationForm(props: PaperProps) {
   });
 
   const onLogin = async (values: typeof form.values) => {
-    console.log(values);
     try {
-      await loginMutation(values);
+      await $login(values);
+      console.log("login router: ", router);
       router.refresh();
+      console.log("login next: ", next);
       if (next) {
         router.push(next as Route);
       } else {
@@ -76,9 +74,8 @@ export function AuthenticationForm(props: PaperProps) {
   };
 
   const onSignup = async (values: typeof form.values) => {
-    console.log(values);
     try {
-      await signupMutation(values);
+      await $signup(values);
       router.refresh();
       router.push("/");
     } catch (error: any) {
@@ -97,8 +94,6 @@ export function AuthenticationForm(props: PaperProps) {
     } else {
       onSignup(values);
     }
-
-    console.log("values 2", values);
   };
 
   return (
