@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { BlitzPage } from "@blitzjs/next";
-import { Stack, Text, Button, List, Loader } from "@mantine/core";
+import { Stack, Text, Button, List, Loader, Input } from "@mantine/core";
 import { useMutation, useQuery } from "@blitzjs/rpc";
 import getTodos from "@/todos/queries/getTodos";
 import getTodo from "@/todo/queries/getTodo";
@@ -14,19 +14,26 @@ const Todos = () => {
     search: "blah",
   });
 
+  const [todoTitle, setTodoTitle] = React.useState("");
+
   const [$addTodo] = useMutation(addTodo, {
-    onSuccess: (result) => {
-      notifications.show({ title: "Mutation successful", message: result });
+    onSuccess: (todo) => {
+      notifications.show({ title: "Mutation successful", message: `Created todo: ${todo.title}` });
     },
   });
 
   return (
     <Stack gap="md">
+      <Input
+        value={todoTitle}
+        onChange={(event) => setTodoTitle(event.currentTarget.value)}
+        placeholder="Enter todo Title"
+        w="200"
+      />
       <Button
         onClick={async () => {
-          const result = await $addTodo({
-            todoTitle: "New Todo to create",
-            id: "123",
+          await $addTodo({
+            todoTitle: todoTitle,
           });
         }}
         w="150"
@@ -35,7 +42,7 @@ const Todos = () => {
         Create Todo
       </Button>
       <List>
-        {todos.map((todo: { title: string; id: number }) => (
+        {todos.map((todo: { title: string; id: string }) => (
           <List.Item key={todo.id}>
             <Text>{todo.title}</Text>
           </List.Item>
