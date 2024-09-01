@@ -8,13 +8,15 @@ import { z } from "zod";
 export const Input = z.object({
   email,
   password,
+  name: z.string(),
 });
 
-export default resolver.pipe(resolver.zod(Input), async ({ email, password }, ctx) => {
+export default resolver.pipe(resolver.zod(Input), async ({ email, password, name }, ctx) => {
   const blitzContext = ctx;
   const hashedPassword = await SecurePassword.hash(password || "test-password");
   const user = await db.user.create({
-    data: { email, hashedPassword },
+    data: { email, hashedPassword, name, role: "USER" },
+    select: { id: true, name: true, email: true, role: true },
   });
 
   await blitzContext.session.$create({

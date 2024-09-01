@@ -8,8 +8,10 @@ import getTodo from "@/todo/queries/getTodo";
 import { Suspense } from "react";
 import addTodo from "@/todos/mutations/addTodo";
 import { notifications } from "@mantine/notifications";
+import { useCurrentUser } from "@/users/hooks/useCurrentUser";
 
 const Todos = () => {
+  const user = useCurrentUser();
   const [todos] = useQuery(getTodos, {
     search: "blah",
   });
@@ -24,6 +26,7 @@ const Todos = () => {
 
   return (
     <Stack gap="md">
+      {user && <Text>Welcome {user.name} here are your todos!</Text>}
       <Input
         value={todoTitle}
         onChange={(event) => setTodoTitle(event.currentTarget.value)}

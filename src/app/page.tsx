@@ -30,14 +30,20 @@ export default async function Home() {
             <Anchor component={Link} href="/" underline="never" c="gray.3" fw="bold" p="xs">
               Eventio
             </Anchor>
-            {/* <CustomBurger /> */}
-            {currentUser && <LogoutButton />}
+            {currentUser && (
+              <Group justify="flex-end" gap="md">
+                <Text fz="sm" c="gray.3">
+                  {currentUser.name}!
+                </Text>
+                <LogoutButton />
+              </Group>
+            )}
           </Group>
         </AppShellHeader>
         <AppShellMain>
           <Stack align="stretch" justify="flex-start" gap="md">
             <Title>Home</Title>
-            {currentUser && <UserInfo currentUser={currentUser} />}
+            {/* {currentUser && <UserInfo currentUser={currentUser} />} */}
             {!currentUser && (
               <Stack align="center" justify="center" style={{ height: "100%" }}>
                 <AuthenticationForm />

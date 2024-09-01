@@ -6,7 +6,7 @@ import getTodo from "@/todo/queries/getTodo";
 import { Suspense } from "react";
 
 interface User {
-  id: number;
+  id: string;
   name: string | null;
   email: string;
   role: string;
