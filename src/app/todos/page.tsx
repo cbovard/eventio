@@ -25,7 +25,8 @@ const Todos = () => {
       <Button
         onClick={async () => {
           const result = await $addTodo({
-            todoTitle: "New Todo",
+            todoTitle: "New Todo to create",
+            id: "123",
           });
         }}
         w="150"
