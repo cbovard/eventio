@@ -18,25 +18,15 @@ export default async function Home() {
 
   return (
     <>
-      <AppShell header={{ height: 55 }} footer={{ height: 60 }} padding="md">
-        <AppShellHeader>
-          <Header />
-        </AppShellHeader>
-        <AppShellMain>
-          <Stack align="stretch" justify="flex-start" gap="md">
-            <Title>Home</Title>
-            {/* {currentUser && <UserInfo currentUser={currentUser} />} */}
-            {!currentUser && (
-              <Stack align="center" justify="center" style={{ height: "100%" }}>
-                <AuthenticationForm />
-              </Stack>
-            )}
+      <Stack align="stretch" justify="flex-start" gap="md">
+        <Title>Home</Title>
+        {/* {currentUser && <UserInfo currentUser={currentUser} />} */}
+        {!currentUser && (
+          <Stack align="center" justify="center" style={{ height: "100%" }}>
+            <AuthenticationForm />
           </Stack>
-        </AppShellMain>
-        <AppShellFooter>
-          <Footer />
-        </AppShellFooter>
-      </AppShell>
+        )}
+      </Stack>
     </>
   );
 }
