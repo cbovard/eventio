@@ -1,19 +1,10 @@
 import { BlitzProvider } from "./blitz-client";
 import { Inter } from "next/font/google";
 import { Metadata } from "next";
-import {
-  ColorSchemeScript,
-  MantineProvider,
-  AppShell,
-  AppShellHeader,
-  AppShellMain,
-  AppShellFooter,
-} from "@mantine/core";
 import "./styles/globals.css";
 import "@mantine/core/styles.css";
+import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,17 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${inter.className}`}>
         <MantineProvider defaultColorScheme="dark">
           <Notifications position="top-right" />
-          <BlitzProvider>
-            <AppShell header={{ height: 55 }} footer={{ height: 60 }} padding="md">
-              <AppShellHeader>
-                <Header />
-              </AppShellHeader>
-              <AppShellMain>{children}</AppShellMain>
-              <AppShellFooter>
-                <Footer />
-              </AppShellFooter>
-            </AppShell>
-          </BlitzProvider>
+          <BlitzProvider>{children}</BlitzProvider>
         </MantineProvider>
       </body>
     </html>

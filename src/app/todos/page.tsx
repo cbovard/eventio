@@ -1,26 +1,95 @@
 "use client";
 import React from "react";
 import { BlitzPage } from "@blitzjs/next";
-import { Stack, Text, Button, List, Loader, Input } from "@mantine/core";
-import { useMutation, useQuery } from "@blitzjs/rpc";
+import { Group, Stack, Text, Button, List, Loader, Input, Checkbox } from "@mantine/core";
+import { useMutation, useQuery, QueryClient } from "@blitzjs/rpc";
+
+import { useQueryClient } from "@tanstack/react-query";
+
 import getTodos from "@/todos/queries/getTodos";
-import getTodo from "@/todo/queries/getTodo";
+// import getTodo from "@/todo/queries/getTodo";
 import { Suspense } from "react";
 import addTodo from "@/todos/mutations/addTodo";
 import { notifications } from "@mantine/notifications";
 import { useCurrentUser } from "@/users/hooks/useCurrentUser";
+import toggleTodo from "@/todos/mutations/toggleTodo";
+
+const Todo = ({ todo }: { todo: { title: string; id: string; done: boolean } }) => {
+  const [$toggleTodo] = useMutation(toggleTodo);
+
+  return (
+    <Group gap="md">
+      <Checkbox
+        checked={todo.done}
+        onClick={async () =>
+          await $toggleTodo({
+            id: todo.id,
+          })
+        }
+        onChange={() => {}}
+      />
+      <Text>{todo.title}</Text>
+    </Group>
+  );
+};
 
 const Todos = () => {
   const user = useCurrentUser();
-  const [todos] = useQuery(getTodos, {
-    search: "blah",
-  });
+  const [todos] = useQuery(getTodos, {});
 
   const [todoTitle, setTodoTitle] = React.useState("");
 
+  // const [$addTodo] = useMutation(addTodo, {});
+
+  //const queryClient = useQueryClient();
+
+  // THIS DOES NOT WORK
+
+  // const [$addTodo] = useMutation(addTodo, {
+  //   onSuccess: (todo) => {
+  //     notifications.show({ title: "Mutation successful", message: `Created todo: ${todo.title}` });
+
+  //     // need to manually invalidate queries now
+  //     const queryClient = new QueryClient({
+  //       defaultOptions: {
+  //         queries: {
+  //           retry: 2,
+  //         },
+  //       },
+  //     });
+
+  //     // console.log(queryClient);
+
+  //     // /console.log(queryClient.getQueryCache());
+
+  //     //await queryClient.invalidateQueries();
+  //     queryClient.invalidateQueries({ queryKey: ["/api/rpc/getTodos", { json: {} }] });
+
+  //     console.log("add to do mutation success aarrgg");
+  //   },
+  // });
+
+  const queryClient = useQueryClient();
+
   const [$addTodo] = useMutation(addTodo, {
     onSuccess: (todo) => {
-      notifications.show({ title: "Mutation successful", message: `Created todo: ${todo.title}` });
+      notifications.show({
+        title: "Mutation successful",
+        message: `Created todo: ${todo.title}`,
+      });
+
+      const queries = queryClient.getQueryCache().getAll();
+
+      queries.forEach((query) => {
+        console.log(JSON.stringify(query.queryKey));
+      });
+
+      // Manually invalidate the correct query
+      queryClient.invalidateQueries({ queryKey: ["/api/rpc/getTodos", { json: {} }] });
+
+      console.log(queryClient.getQueryCache());
+
+      console.log("add to do mutation success works");
     },
   });
 
@@ -45,10 +114,8 @@ const Todos = () => {
         Create Todo
       </Button>
       <List>
-        {todos.map((todo: { title: string; id: string }) => (
-          <List.Item key={todo.id}>
-            <Text>{todo.title}</Text>
-          </List.Item>
+        {todos.map((todo: { title: string; id: string; done: boolean }) => (
+          <Todo todo={todo} key={todo.id} />
         ))}
       </List>
     </Stack>
@@ -57,7 +124,7 @@ const Todos = () => {
 
 export const TodosPage: BlitzPage = () => {
   return (
-    <Stack h={300} align="stretch" justify="center" gap="md">
+    <Stack h={300} align="stretch" justify="center" gap="md" p="md">
       <Suspense fallback={<Loader />}>
         <Todos />
       </Suspense>

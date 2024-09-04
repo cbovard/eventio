@@ -2,16 +2,12 @@ import { resolver } from "@blitzjs/rpc";
 import { z } from "zod";
 import db from "db";
 
-const Input = z.object({
-  search: z.string().optional(),
-});
+const Input = z.object({});
 
 export default resolver.pipe(
   resolver.zod(Input),
   resolver.authorize(),
-  async ({ search }, { session: { userId } }) => {
-    //console.log("User is searching todos with search term: ", search);
-
+  async ({}, { session: { userId } }) => {
     const todos = await db.todo.findMany({
       where: {
         userId,
