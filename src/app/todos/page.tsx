@@ -2,9 +2,7 @@
 import React from "react";
 import { BlitzPage } from "@blitzjs/next";
 import { Group, Stack, Text, Button, List, Loader, Input, Checkbox } from "@mantine/core";
-import { useMutation, useQuery, QueryClient } from "@blitzjs/rpc";
-
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@blitzjs/rpc";
 
 import getTodos from "@/todos/queries/getTodos";
 // import getTodo from "@/todo/queries/getTodo";
@@ -13,9 +11,21 @@ import addTodo from "@/todos/mutations/addTodo";
 import { notifications } from "@mantine/notifications";
 import { useCurrentUser } from "@/users/hooks/useCurrentUser";
 import toggleTodo from "@/todos/mutations/toggleTodo";
+import { useClearQueryCache } from "@/utils/utils";
 
 const Todo = ({ todo }: { todo: { title: string; id: string; done: boolean } }) => {
-  const [$toggleTodo] = useMutation(toggleTodo);
+  // Use the custom hook to get the clear cache function.
+  const clearQueryCache = useClearQueryCache();
+
+  const [$toggleTodo] = useMutation(toggleTodo, {
+    onSuccess: () => {
+      const toggleTodoQueryKey = ["/api/rpc/getTodos", { json: {} }];
+
+      // Call the function returned by the hook to invalidate the query
+      clearQueryCache(toggleTodoQueryKey);
+      // console.log("Todo Toggled");
+    },
+  });
 
   return (
     <Group gap="md">
@@ -36,40 +46,10 @@ const Todo = ({ todo }: { todo: { title: string; id: string; done: boolean } }) 
 const Todos = () => {
   const user = useCurrentUser();
   const [todos] = useQuery(getTodos, {});
-
   const [todoTitle, setTodoTitle] = React.useState("");
 
-  // const [$addTodo] = useMutation(addTodo, {});
-
-  //const queryClient = useQueryClient();
-
-  // THIS DOES NOT WORK
-
-  // const [$addTodo] = useMutation(addTodo, {
-  //   onSuccess: (todo) => {
-  //     notifications.show({ title: "Mutation successful", message: `Created todo: ${todo.title}` });
-
-  //     // need to manually invalidate queries now
-  //     const queryClient = new QueryClient({
-  //       defaultOptions: {
-  //         queries: {
-  //           retry: 2,
-  //         },
-  //       },
-  //     });
-
-  //     // console.log(queryClient);
-
-  //     // /console.log(queryClient.getQueryCache());
-
-  //     //await queryClient.invalidateQueries();
-  //     queryClient.invalidateQueries({ queryKey: ["/api/rpc/getTodos", { json: {} }] });
-
-  //     console.log("add to do mutation success aarrgg");
-  //   },
-  // });
-
-  const queryClient = useQueryClient();
+  // Use the custom hook to get the clear cache function.
+  const clearQueryCache = useClearQueryCache();
 
   const [$addTodo] = useMutation(addTodo, {
     onSuccess: (todo) => {
@@ -78,18 +58,11 @@ const Todos = () => {
         message: `Created todo: ${todo.title}`,
       });
 
-      const queries = queryClient.getQueryCache().getAll();
+      const todosQueryKey = ["/api/rpc/getTodos", { json: {} }];
 
-      queries.forEach((query) => {
-        console.log(JSON.stringify(query.queryKey));
-      });
-
-      // Manually invalidate the correct query
-      queryClient.invalidateQueries({ queryKey: ["/api/rpc/getTodos", { json: {} }] });
-
-      console.log(queryClient.getQueryCache());
-
-      console.log("add to do mutation success works");
+      // Call the function returned by the hook to invalidate the query
+      clearQueryCache(todosQueryKey);
+      // console.log("Todo added successfully, query cache cleared.");
     },
   });
 
