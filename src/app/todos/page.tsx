@@ -1,16 +1,33 @@
 "use client";
 import React from "react";
 import { BlitzPage } from "@blitzjs/next";
-import { Group, Stack, Text, Button, List, Loader, Input, Checkbox } from "@mantine/core";
+import {
+  AppShell,
+  AppShellHeader,
+  AppShellMain,
+  AppShellFooter,
+  Title,
+  Flex,
+  Group,
+  Stack,
+  Text,
+  Button,
+  List,
+  Loader,
+  Input,
+  Checkbox,
+} from "@mantine/core";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { useMutation, useQuery } from "@blitzjs/rpc";
-
-import getTodos from "@/todos/queries/getTodos";
-// import getTodo from "@/todo/queries/getTodo";
 import { Suspense } from "react";
-import addTodo from "@/todos/mutations/addTodo";
 import { notifications } from "@mantine/notifications";
 import { useCurrentUser } from "@/users/hooks/useCurrentUser";
+import getTodos from "@/todos/queries/getTodos";
+// import getTodo from "@/todo/queries/getTodo";
+import addTodo from "@/todos/mutations/addTodo";
 import toggleTodo from "@/todos/mutations/toggleTodo";
+import cleanCompleted from "@/todos/mutations/cleanCompleted";
 import { useClearQueryCache } from "@/utils/utils";
 
 const Todo = ({ todo }: { todo: { title: string; id: string; done: boolean } }) => {
@@ -66,6 +83,21 @@ const Todos = () => {
     },
   });
 
+  const [$cleanCompleted] = useMutation(cleanCompleted, {
+    onSuccess: () => {
+      notifications.show({
+        title: "Mutation successful",
+        message: `Cleaned completed todos`,
+      });
+
+      const todosQueryKey = ["/api/rpc/getTodos", { json: {} }];
+
+      // Call the function returned by the hook to invalidate the query
+      clearQueryCache(todosQueryKey);
+      // console.log("Todos cleaned successfully, query cache cleared.");
+    },
+  });
+
   return (
     <Stack gap="md">
       {user && <Text>Welcome {user.name} here are your todos!</Text>}
@@ -86,6 +118,16 @@ const Todos = () => {
       >
         Create Todo
       </Button>
+      <Button
+        onClick={async () => {
+          // We need to pass the empty object {} as the input to the mutation.
+          $cleanCompleted({});
+        }}
+        w="220"
+        size="md"
+      >
+        Clean Completed
+      </Button>
       <List>
         {todos.map((todo: { title: string; id: string; done: boolean }) => (
           <Todo todo={todo} key={todo.id} />
@@ -97,11 +139,34 @@ const Todos = () => {
 
 export const TodosPage: BlitzPage = () => {
   return (
-    <Stack h={300} align="stretch" justify="center" gap="md" p="md">
-      <Suspense fallback={<Loader />}>
-        <Todos />
-      </Suspense>
-    </Stack>
+    <>
+      <AppShell header={{ height: 55 }} footer={{ height: 60 }} padding="md">
+        <AppShellHeader>
+          <Header />
+        </AppShellHeader>
+        <AppShellMain>
+          <Stack align="stretch" justify="flex-start" gap="md">
+            <Title>Todos Page</Title>
+            <Flex
+              h="300"
+              p="md"
+              gap="md"
+              justify="flex-start"
+              align="flex-start"
+              direction="row"
+              wrap="wrap"
+            >
+              <Suspense fallback={<Loader />}>
+                <Todos />
+              </Suspense>
+            </Flex>
+          </Stack>
+        </AppShellMain>
+        <AppShellFooter>
+          <Footer />
+        </AppShellFooter>
+      </AppShell>
+    </>
   );
 };
 

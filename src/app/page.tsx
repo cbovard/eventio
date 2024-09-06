@@ -7,11 +7,11 @@ import {
   Title,
   Stack,
 } from "@mantine/core";
-import getCurrentUser from "@/users/queries/getCurrentUser";
 import { Header } from "@/components/Header";
-// TODO - clean this up below.
-import { AuthenticationForm } from "./(auth)/components/MainAuthenticationForm/index";
 import { Footer } from "@/components/Footer";
+// TODO - clean this up below.
+import getCurrentUser from "@/users/queries/getCurrentUser";
+import { AuthenticationForm } from "./(auth)/components/MainAuthenticationForm/index";
 
 export default async function Home() {
   const currentUser = await invoke(getCurrentUser, null);

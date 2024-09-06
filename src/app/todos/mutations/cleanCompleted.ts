@@ -1,27 +1,20 @@
 import { resolver } from "@blitzjs/rpc";
-import { z } from "zod";
 import db from "db";
+import { z } from "zod";
 
+// An empty object is passed as the input schema because we don't need any input for this mutation.
+// This will create an empty object {}.
 const Input = z.object({});
 
 export default resolver.pipe(
   resolver.zod(Input),
   resolver.authorize(),
   async ({}, { session: { userId } }) => {
-    const todos = await db.todo.findMany({
+    return db.todo.deleteMany({
       where: {
         userId,
-      },
-      orderBy: {
-        createdAt: "asc",
-      },
-      select: {
-        id: true,
-        title: true,
         done: true,
       },
     });
-
-    return todos;
   }
 );
