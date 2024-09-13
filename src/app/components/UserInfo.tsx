@@ -1,9 +1,5 @@
 "use client";
-import { Stack, Text, Button, List, Loader } from "@mantine/core";
-import { useQuery } from "@blitzjs/rpc";
-import getTodos from "@/todos/queries/getTodos";
-import getTodo from "@/todo/queries/getTodo";
-import { Suspense } from "react";
+import { Stack, Text } from "@mantine/core";
 
 interface User {
   id: string;
@@ -13,8 +9,6 @@ interface User {
 }
 
 export const UserInfo = ({ currentUser }: { currentUser: User }) => {
-  const [singleTodo] = useQuery(getTodo, {});
-
   if (!currentUser) return null;
 
   return (

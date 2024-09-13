@@ -1,6 +1,6 @@
 "use client";
 import { FORM_ERROR } from "src/app/components/Form";
-import { ForgotPassword } from "../validations";
+// import { ForgotPassword } from "../validations";
 import forgotPassword from "../mutations/forgotPassword";
 import { useMutation } from "@blitzjs/rpc";
 
@@ -21,7 +21,7 @@ export function ForgotPasswordForm() {
     },
   });
 
-  let onSubmit = async (values) => {
+  let onSubmit = async (values: typeof form.values) => {
     console.log(values);
     try {
       await forgotPasswordMutation(values);

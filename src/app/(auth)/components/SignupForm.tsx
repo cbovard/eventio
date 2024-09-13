@@ -29,8 +29,7 @@ export const SignupForm = (props: SignupFormProps) => {
     },
   });
 
-  let onSubmit = async (values) => {
-    console.log(values);
+  let onSubmit = async (values: any) => {
     try {
       await signupMutation(values);
       router.refresh();

@@ -22,7 +22,7 @@ export function ResetPasswordForm() {
     },
   });
 
-  const onSubmit = async (values) => {
+  const onSubmit = async (values: any) => {
     console.log;
     try {
       await resetPasswordMutation({ ...values, token });

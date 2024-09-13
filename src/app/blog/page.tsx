@@ -1,5 +1,4 @@
 import React from "react";
-
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,8 +6,6 @@ export const metadata: Metadata = {
   description: "Blog here",
 };
 
-const BlogPage = () => {
+export default function BlogPage() {
   return <div>This is the blog landing page.</div>;
-};
-
-export default BlogPage;
+}

@@ -6,6 +6,7 @@ import "@mantine/core/styles.css";
 import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
+import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,10 +21,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <head>
+      <Head>
         {/* todo https://nextjs.org/docs/app/api-reference/functions/generate-viewport */}
         <ColorSchemeScript />
-      </head>
+      </Head>
       <body className={`${inter.className}`}>
         <MantineProvider defaultColorScheme="dark">
           <Notifications position="top-right" zIndex={1000} />
