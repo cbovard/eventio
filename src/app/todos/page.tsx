@@ -19,7 +19,7 @@ import {
 } from "@mantine/core";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { useMutation, useQuery } from "@blitzjs/rpc";
+import { useMutation, useQuery, invalidateQuery } from "@blitzjs/rpc";
 import { Suspense } from "react";
 import { notifications } from "@mantine/notifications";
 import { useCurrentUser } from "@/users/hooks/useCurrentUser";
@@ -28,19 +28,20 @@ import getTodos from "@/todos/queries/getTodos";
 import addTodo from "@/todos/mutations/addTodo";
 import toggleTodo from "@/todos/mutations/toggleTodo";
 import cleanCompleted from "@/todos/mutations/cleanCompleted";
-import { useClearQueryCache } from "@/utils/utils";
+// import { useClearQueryCache } from "@/utils/utils";
 
 const Todo = ({ todo }: { todo: { title: string; id: string; done: boolean } }) => {
   // Use the custom hook to get the clear cache function.
-  const clearQueryCache = useClearQueryCache();
+  //const clearQueryCache = useClearQueryCache();
 
   const [$toggleTodo] = useMutation(toggleTodo, {
     onSuccess: () => {
-      const toggleTodoQueryKey = ["/api/rpc/getTodos", { json: {} }];
-
+      //const toggleTodoQueryKey = ["/api/rpc/getTodos", { json: {} }];
       // Call the function returned by the hook to invalidate the query
-      clearQueryCache(toggleTodoQueryKey);
-      // console.log("Todo Toggled");
+      //clearQueryCache(toggleTodoQueryKey);
+
+      invalidateQuery(getTodos);
+      console.log("Todo Toggled");
     },
   });
 
@@ -66,7 +67,7 @@ const Todos = () => {
   const [todoTitle, setTodoTitle] = React.useState("");
 
   // Use the custom hook to get the clear cache function.
-  const clearQueryCache = useClearQueryCache();
+  //const clearQueryCache = useClearQueryCache();
 
   const [$addTodo] = useMutation(addTodo, {
     onSuccess: (todo) => {
@@ -75,11 +76,13 @@ const Todos = () => {
         message: `Created todo: ${todo.title}`,
       });
 
-      const todosQueryKey = ["/api/rpc/getTodos", { json: {} }];
+      //const todosQueryKey = ["/api/rpc/getTodos", { json: {} }];
+
+      invalidateQuery(getTodos);
 
       // Call the function returned by the hook to invalidate the query
-      clearQueryCache(todosQueryKey);
-      // console.log("Todo added successfully, query cache cleared.");
+      //clearQueryCache(todosQueryKey);
+      console.log("Todo added successfully, query cache cleared.");
     },
   });
 
@@ -90,11 +93,13 @@ const Todos = () => {
         message: `Cleaned completed todos`,
       });
 
-      const todosQueryKey = ["/api/rpc/getTodos", { json: {} }];
+      //const todosQueryKey = ["/api/rpc/getTodos", { json: {} }];
+
+      invalidateQuery(getTodos);
 
       // Call the function returned by the hook to invalidate the query
-      clearQueryCache(todosQueryKey);
-      // console.log("Todos cleaned successfully, query cache cleared.");
+      //clearQueryCache(todosQueryKey);
+      console.log("Todos cleaned successfully, query cache cleared.");
     },
   });
 
