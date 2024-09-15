@@ -7,9 +7,7 @@
     "build": "blitz prisma migrate deploy && blitz prisma generate && blitz build",
     "start": "blitz start",
     "db:studio": "BROWSER=none blitz prisma studio",
-    "db:migrate": "blitz prisma migrate dev",
-    "--------railway tese will use the railway env": "--------------------------",
-    "railway:de ": "railway run blitz dev"
+    "db:migrate": "blitz prisma migrate dev"
   },
   "prisma": {
     "schema": "db/schema.prisma"

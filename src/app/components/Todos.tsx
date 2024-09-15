@@ -13,7 +13,7 @@ const Todo = ({ todo }: { todo: { title: string; id: string; done: boolean } }) 
   // Use the custom hook to get the clear cache function.
   //const clearQueryCache = useClearQueryCache();
 
-  const [$toggleTodo] = useMutation(toggleTodo, {
+  const [$toggleTodo, { isLoading }] = useMutation(toggleTodo, {
     onSuccess: () => {
       //const toggleTodoQueryKey = ["/api/rpc/getTodos", { json: {} }];
       // Call the function returned by the hook to invalidate the query
@@ -27,6 +27,7 @@ const Todo = ({ todo }: { todo: { title: string; id: string; done: boolean } }) 
   return (
     <Group gap="md">
       <Checkbox
+        disabled={isLoading}
         checked={todo.done}
         onClick={async () =>
           await $toggleTodo({
