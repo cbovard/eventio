@@ -8,9 +8,8 @@
     "start": "blitz start",
     "db:studio": "BROWSER=none blitz prisma studio",
     "db:migrate": "blitz prisma migrate dev",
-    "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
-    "test": "vitest run --passWithNoTests",
-    "test:watch": "vitest"
+    "--------railway tese will use the railway env": "--------------------------",
+    "railway:de ": "railway run blitz dev"
   },
   "prisma": {
     "schema": "db/schema.prisma"
