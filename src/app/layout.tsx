@@ -28,7 +28,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${inter.className}`}>
         <MantineProvider defaultColorScheme="dark">
           <Notifications position="top-right" zIndex={1000} />
-          <BlitzProvider>{children}</BlitzProvider>
+          <BlitzProvider>
+            <>{children}</>
+          </BlitzProvider>
         </MantineProvider>
       </body>
     </html>

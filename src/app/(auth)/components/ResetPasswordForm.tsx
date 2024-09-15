@@ -23,7 +23,6 @@ export function ResetPasswordForm() {
   });
 
   const onSubmit = async (values: any) => {
-    console.log;
     try {
       await resetPasswordMutation({ ...values, token });
     } catch (error: any) {
@@ -56,7 +55,6 @@ export function ResetPasswordForm() {
             withAsterisk
             label="New Password"
             placeholder=""
-            key={form.key("password")}
             {...form.getInputProps("password")}
           />
 
@@ -64,7 +62,6 @@ export function ResetPasswordForm() {
             withAsterisk
             label="Password Confirmation"
             placeholder=""
-            key={form.key("password")}
             {...form.getInputProps("passwordConfirmation")}
           />
 

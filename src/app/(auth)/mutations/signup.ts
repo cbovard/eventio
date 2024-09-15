@@ -2,12 +2,12 @@ import { SecurePassword } from "@blitzjs/auth/secure-password";
 import { resolver } from "@blitzjs/rpc";
 import db from "db";
 import { Role } from "types";
-import { email, password } from "@/(auth)/validations";
+// import { email, password } from "@/(auth)/validations";
 import { z } from "zod";
 
 export const Input = z.object({
-  email,
-  password,
+  email: z.string(),
+  password: z.string(),
   name: z.string(),
 });
 

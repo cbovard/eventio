@@ -1,11 +1,11 @@
 import { resolver } from "@blitzjs/rpc";
-import { email } from "@/(auth)/validations";
+// import { email } from "@/(auth)/validations";
 import { Role } from "types";
 import { authenticateUser } from "@/(auth)/utils/auth-utils";
 import { z } from "zod";
 
 export const LoginInput = z.object({
-  email,
+  email: z.string(),
   password: z.string(),
 });
 
