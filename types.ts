@@ -1,6 +1,8 @@
 import { SimpleRolesIsAuthorized } from "@blitzjs/auth";
 import { User } from "./db";
 
+import { PropsWithChildren } from "react";
+
 export type Role = "ADMIN" | "USER";
 
 declare module "@blitzjs/auth" {
@@ -13,3 +15,6 @@ declare module "@blitzjs/auth" {
     };
   }
 }
+
+// todo - reasearch - Shorthand for declaring typed React Components.
+export type ReactFC<T> = React.FC<PropsWithChildren & T>;

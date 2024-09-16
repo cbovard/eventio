@@ -51,4 +51,7 @@ const TodosPage: BlitzPage = () => {
   );
 };
 
+// todo - Research Blitz page
+TodosPage.authenticate = true;
+
 export default TodosPage;

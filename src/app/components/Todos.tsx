@@ -8,8 +8,15 @@ import getTodos from "@/todos/queries/getTodos";
 import addTodo from "@/todos/mutations/addTodo";
 import toggleTodo from "@/todos/mutations/toggleTodo";
 import cleanCompleted from "@/todos/mutations/cleanCompleted";
+import { PromiseReturnType } from "blitz";
 
-const Todo = ({ todo }: { todo: { title: string; id: string; done: boolean } }) => {
+// Blitz way to get the return type of a promise.
+type TodoReturnedFromServer = PromiseReturnType<typeof getTodos>;
+type SingleTodo = TodoReturnedFromServer[0];
+
+const Todo = ({ todo }: { todo: SingleTodo }) => {
+  // Old way before blizt way.
+  //const Todo = ({ todo }: { todo: { title: string; id: string; done: boolean } }) => {
   // Use the custom hook to get the clear cache function.
   //const clearQueryCache = useClearQueryCache();
 
