@@ -12,9 +12,10 @@ import {
 } from "@mantine/core";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { ErrorBoundary } from "@blitzjs/next";
+import { AuthenticationForm } from "@/(auth)/components/MainAuthenticationForm/index";
 import { Suspense } from "react";
 import { Todos } from "@/components/Todos";
-
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -39,8 +40,11 @@ const TodosPage: BlitzPage = () => {
             direction="row"
             wrap="wrap"
           >
-            <Todos />
-            <Suspense fallback={<Loader />}>{/* <Todos /> */}</Suspense>
+            <ErrorBoundary fallback={<AuthenticationForm />}>
+              <Suspense fallback={<Loader />}>
+                <Todos />
+              </Suspense>
+            </ErrorBoundary>
           </Flex>
         </Stack>
       </AppShellMain>
@@ -52,6 +56,6 @@ const TodosPage: BlitzPage = () => {
 };
 
 // todo - Research Blitz page
-TodosPage.authenticate = true;
+// TodosPage.authenticate = true;
 
 export default TodosPage;

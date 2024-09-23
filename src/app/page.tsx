@@ -1,4 +1,3 @@
-import { invoke } from "@/blitz-server";
 import { AppShell, AppShellHeader, AppShellMain, AppShellFooter } from "@mantine/core";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";

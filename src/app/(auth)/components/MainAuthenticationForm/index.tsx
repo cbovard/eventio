@@ -53,9 +53,7 @@ export function AuthenticationForm(props: PaperProps) {
   const onLogin = async (values: typeof form.values) => {
     try {
       await $login(values);
-      console.log("login router: ", router);
       router.refresh();
-      console.log("login next: ", next);
       if (next) {
         router.push(next as Route);
       } else {

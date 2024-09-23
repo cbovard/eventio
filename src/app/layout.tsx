@@ -1,4 +1,5 @@
 import { BlitzProvider } from "./blitz-client";
+
 import { Inter } from "next/font/google";
 import { Metadata } from "next";
 import "./styles/globals.css";

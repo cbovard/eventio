@@ -7,10 +7,7 @@ import adminOnlyMutation from "@/(auth)/mutations/adminOnlyMutation";
 
 export function HomePage() {
   const currentUser = useCurrentUser();
-
   const [$adminOnlyMutation] = useMutation(adminOnlyMutation);
-
-  console.log("homepage component");
 
   return (
     <Stack align="stretch" justify="flex-start" gap="md">
